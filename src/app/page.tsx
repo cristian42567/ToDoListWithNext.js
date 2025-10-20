@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Task = {
   text: string;
@@ -10,6 +10,19 @@ type Task = {
 export default function Home() {
   const [newTask, setNewTask] = useState("");
   const [taskList, setTaskList] = useState<Task[]>([]);
+
+  // Cargar las tareas desde localStorage
+  useEffect(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+      setTaskList(JSON.parse(savedTasks));
+    }
+  }, []);
+
+  // Guardar tareas desde localStorage
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(taskList));
+  }, [taskList]);
 
   // Agregar tarea
   const addTask = () => {
